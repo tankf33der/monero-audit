@@ -59,30 +59,21 @@ typedef struct                               /*  256-bit Skein hash context stru
 {
   Skein_Ctxt_Hdr_t h;                      /* common header context variables */
   u64b_t  X[SKEIN_256_STATE_WORDS];        /* chaining variables */
-	union {
-		u08b_t b[SKEIN_256_BLOCK_BYTES];        /* partial block buffer (8-byte aligned) */
-		u64b_t balias[SKEIN_256_STATE_WORDS];        /* partial block buffer (8-byte aligned) */
-	};
+  u08b_t  b[SKEIN_256_BLOCK_BYTES];        /* partial block buffer (8-byte aligned) */
 } Skein_256_Ctxt_t;
 
 typedef struct                               /*  512-bit Skein hash context structure */
 {
   Skein_Ctxt_Hdr_t h;                      /* common header context variables */
   u64b_t  X[SKEIN_512_STATE_WORDS];        /* chaining variables */
-    union {
-        u08b_t b[SKEIN_512_BLOCK_BYTES];        /* partial block buffer (8-byte aligned) */
-        u64b_t balias[SKEIN_512_STATE_WORDS];
-    };
+  u08b_t  b[SKEIN_512_BLOCK_BYTES];        /* partial block buffer (8-byte aligned) */
 } Skein_512_Ctxt_t;
 
 typedef struct                               /* 1024-bit Skein hash context structure */
 {
   Skein_Ctxt_Hdr_t h;                      /* common header context variables */
   u64b_t  X[SKEIN1024_STATE_WORDS];        /* chaining variables */
-	union {
-		u08b_t b[SKEIN1024_BLOCK_BYTES];        /* partial block buffer (8-byte aligned) */
-		u64b_t balias[SKEIN1024_STATE_WORDS];        /* partial block buffer (8-byte aligned) */
-	};
+  u08b_t  b[SKEIN1024_BLOCK_BYTES];        /* partial block buffer (8-byte aligned) */
 } Skein1024_Ctxt_t;
 
 /*   Skein APIs for (incremental) "straight hashing" */
@@ -1366,7 +1357,7 @@ static int Skein_256_Final(Skein_256_Ctxt_t *ctx, u08b_t *hashVal)
     memcpy(X,ctx->X,sizeof(X));       /* keep a local copy of counter mode "key" */
     for (i=0;i*SKEIN_256_BLOCK_BYTES < byteCnt;i++)
         {
-        ctx->balias[0]= Skein_Swap64((u64b_t) i); /* build the counter block */
+        ((u64b_t *)ctx->b)[0]= Skein_Swap64((u64b_t) i); /* build the counter block */
         Skein_Start_New_Type(ctx,OUT_FINAL);
         Skein_256_Process_Block(ctx,ctx->b,1,sizeof(u64b_t)); /* run "counter mode" */
         n = byteCnt - i*SKEIN_256_BLOCK_BYTES;   /* number of output bytes left to go */
@@ -1566,7 +1557,7 @@ static int Skein_512_Final(Skein_512_Ctxt_t *ctx, u08b_t *hashVal)
     memcpy(X,ctx->X,sizeof(X));       /* keep a local copy of counter mode "key" */
     for (i=0;i*SKEIN_512_BLOCK_BYTES < byteCnt;i++)
         {
-        ctx->balias[0] = Skein_Swap64((u64b_t) i); /* build the counter block */
+        ((u64b_t *)ctx->b)[0]= Skein_Swap64((u64b_t) i); /* build the counter block */
         Skein_Start_New_Type(ctx,OUT_FINAL);
         Skein_512_Process_Block(ctx,ctx->b,1,sizeof(u64b_t)); /* run "counter mode" */
         n = byteCnt - i*SKEIN_512_BLOCK_BYTES;   /* number of output bytes left to go */
@@ -1764,7 +1755,7 @@ static int Skein1024_Final(Skein1024_Ctxt_t *ctx, u08b_t *hashVal)
     memcpy(X,ctx->X,sizeof(X));       /* keep a local copy of counter mode "key" */
     for (i=0;i*SKEIN1024_BLOCK_BYTES < byteCnt;i++)
         {
-        ctx->balias[0]= Skein_Swap64((u64b_t) i); /* build the counter block */
+        ((u64b_t *)ctx->b)[0]= Skein_Swap64((u64b_t) i); /* build the counter block */
         Skein_Start_New_Type(ctx,OUT_FINAL);
         Skein1024_Process_Block(ctx,ctx->b,1,sizeof(u64b_t)); /* run "counter mode" */
         n = byteCnt - i*SKEIN1024_BLOCK_BYTES;   /* number of output bytes left to go */
