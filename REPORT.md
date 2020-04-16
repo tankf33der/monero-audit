@@ -3,7 +3,7 @@
 blake        - ok
 groestl      - ok
 jh           - ok
--hmac-keccak - fails
+-keccak+hmac - fails
 skein        - ok
 ```
 
