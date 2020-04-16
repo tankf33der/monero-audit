@@ -9,6 +9,8 @@ skein        - ok
 
 ### KECCAK
 ```
+$ ccomp -version
+The CompCert C verified compiler, version 3.7
 $ make interp
 rm -rf mike.c *.o *.out
 cat *.c > mike.c
