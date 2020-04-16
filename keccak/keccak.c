@@ -10,11 +10,8 @@
 //#include "hash-ops.h"
 #include "keccak.h"
 
-enum {
-  HASH_SIZE = 32,
-  HASH_DATA_AREA = 136
-};
-
+#define HASH_SIZE 32
+#define HASH_DATA_AREA 136
 
 static inline uint64_t swap64(uint64_t x) {
   x = ((x & 0x00ff00ff00ff00ff) <<  8) | ((x & 0xff00ff00ff00ff00) >>  8);

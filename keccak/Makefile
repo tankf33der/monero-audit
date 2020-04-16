@@ -5,7 +5,12 @@ m: c
 	clang -fsanitize=memory *.c && ./a.out
 u: c
 	clang -fsanitize=undefined *.c && ./a.out
-
-	gcc *.c && ./a.out
+mike:
+	cat *.c > mike.c
+	cat memset >> mike.c
+ccomp: c mike
+	ccomp mike.c && ./a.out
+interp: c mike
+	ccomp -interp -quiet mike.c
 c:
-	rm -rf *.o *.out
+	rm -rf mike.c *.o *.out
